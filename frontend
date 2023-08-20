@@ -19,5 +19,5 @@ echo  -e "\e[33mupdate frontend configuration \e[0m"
 cp roboshop.conf /etc/nginx/default.d/roboshop.conf &>>/tmp/roboshop.log
 
 echo  -e "\e[33mStarting nginx server \e[0m"
-systemctl enable nginx server &>>/tmp/roboshop.log
+systemctl enable nginx &>>/tmp/roboshop.log
 systemctl restart nginx &>>/tmp/roboshop.log
