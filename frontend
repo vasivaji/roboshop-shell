@@ -1,7 +1,6 @@
 echo  -e "\e[33mInstalling nginx server \e[0m"
 yum install nginx -y &>>/tmp/roboshop.log
-systemctl enable nginx &>>/tmp/roboshop.log
-systemctl start nginx &>>/tmp/roboshop.log
+
 
 echo  -e "\e[33mRemoving old app content \e[0m"
 rm -rf /usr/share/nginx/html/* &>>/tmp/roboshop.log
@@ -16,7 +15,7 @@ unzip /tmp/frontend.zip" &>>/tmp/roboshop.log
 
 
 echo  -e "\e[33mupdate frontend configuration \e[0m"
-cp roboshop.conf /etc/nginx/default.d/roboshop.conf &>>/tmp/roboshop.log
+cp /home/centos/roboshop-shell/roboshop.conf /etc/nginx/default.d/roboshop.conf
 
 echo  -e "\e[33mStarting nginx server \e[0m"
 systemctl enable nginx &>>/tmp/roboshop.log
