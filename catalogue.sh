@@ -1,3 +1,5 @@
+component=catalogue
+
 
 echo  -e "\e[33mConfiguring nodejs repo \e[0m"
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>/tmp/roboshop.log
@@ -13,24 +15,24 @@ rm -rf /app &>>/tmp/roboshop.log
 mkdir /app &>>/tmp/roboshop.log
 
 echo  -e "\e[33mDownloading app content \e[0m"
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue.zip &>>/tmp/roboshop.log
+curl -o /tmp/$component.zip https://roboshop-artifacts.s3.amazonaws.com/$component.zip &>>/tmp/roboshop.log
 
 
 cd /app &>>/tmp/roboshop.log
 
 echo  -e "\e[33mextract app content \e[0m"
-unzip /tmp/catalogue.zip &>>/tmp/roboshop.log
+unzip /tmp/$component.zip &>>/tmp/roboshop.log
 
 echo  -e "\e[33mInstall nodejs dependencies \e[0m"
 npm install &>>/tmp/roboshop.log
 
 echo  -e "\e[33mCopying service file \e[0m"
-cp /home/centos/roboshop-shell/catalogue.service /etc/systemd/system/catalogue.service &>>/tmp/roboshop.log
+cp /home/centos/roboshop-shell/$component.service /etc/systemd/system/$component.service &>>/tmp/roboshop.log
 
-echo  -e "\e[33mStart catalogue services \e[0m"
+echo  -e "\e[33mStart $conponent services \e[0m"
 systemctl daemon-reload &>>/tmp/roboshop.log
-systemctl enable catalogue &>>/tmp/roboshop.log
-systemctl start catalogue &>>/tmp/roboshop.log
+systemctl enable $component &>>/tmp/roboshop.log
+systemctl start $component &>>/tmp/roboshop.log
 
 echo  -e "\e[33mcopying mongodb repo file \e[0m"
  cp /home/centos/roboshop-shell/mongodb.repo /etc/yum.repos.d/mongo.repo &>>/tmp/roboshop.log
@@ -39,5 +41,5 @@ echo  -e "\e[33minstall mongodb client \e[0m"
 yum install mongodb-org-shell -y &>>/tmp/roboshop.log
 
 echo  -e "\e[33mload scheema \e[0m"
-mongo --host mongodb-dev.devopsb73.xyz </app/schema/catalogue.js &>>/tmp/roboshop.log
+mongo --host mongodb-dev.devopsb73.xyz </app/schema/$component.js &>>/tmp/roboshop.log
 
