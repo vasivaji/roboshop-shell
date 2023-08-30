@@ -1,3 +1,5 @@
+source common.sh
+
 yum module disable mysql -y &>>/tmp/roboshop.log
 
 cp mysql.repo /etc/yum.repos.d/mysql.repo &>>/tmp/roboshop.log

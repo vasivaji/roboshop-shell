@@ -1,3 +1,6 @@
+source common.sh
+
+
 component=redis
 echo -e "\e[33minstalling redis repo file \e[0m"
 yum install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y
