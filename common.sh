@@ -3,7 +3,7 @@ nocolor="\e[0m"
 log_file="/tmp/roboshop.log"
 app_path=" app"
 
-nodejs{
+nodejs(){
   echo  -e "${color}Configuring nodejs repo ${nocolor}"
   curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>log_file
 
@@ -38,7 +38,7 @@ nodejs{
   systemctl start $component &>>log_file
 }
 
-mongo_scheema_setup{
+mongo_scheema_setup(){
   echo  -e "${color}copying mongodb repo file ${nocolor}"
    cp /home/centos/roboshop-shell/mongodb.repo /etc/yum.repos.d/mongo.repo &>>log_file
 
