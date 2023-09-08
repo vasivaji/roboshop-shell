@@ -5,17 +5,66 @@ app_path=" app"
 app_presetup(){
 echo  -e "${color}add application user ${nocolor}"
   useradd roboshop &>>log_file
+  if[ $? -e 0]; then
+    echo success
+    else
+    echo failure
+    fi
  echo  -e "${color}Create application directory ${nocolor}"
   rm -rf ${app_path} &>>log_file
+  if[ $? -e 0]; then
+    echo success
+    else
+    echo failure
+    fi
   mkdir ${app_path} &>>log_file
+
+  if[ $? -e 0]; then
+  echo success
+  else
+  echo failure
+  fi
+
+
   echo  -e "${color}Downloading app content ${nocolor}"
     curl -o /tmp/$component.zip https://roboshop-artifacts.s3.amazonaws.com/$component.zip &>>log_file
  cd ${app_path} &>>log_file
+ if[ $? -e 0]; then
+   echo success
+   else
+   echo failure
+   fi
 
   echo  -e "${color}extract app content ${nocolor}"
   unzip /tmp/$component.zip &>>log_file
+  if[ $? -e 0]; then
+    echo success
+    else
+    echo failure
+    fi
 
 }
+
+systemd_setup(){
+   echo -e "${color}Copying the service file${nocolor}"
+    cp $component.service /etc/systemd/system/$component.service &>>log_file
+    if[ $? -e 0]; then
+      echo success
+      else
+      echo failure
+      fi
+    systemctl daemon-reload &>>log_file
+    echo -e "${color}Start shipping services ${nocolor}"
+    systemctl enable $component &>>log_file
+    systemctl start $component &>>log_file
+    if[ $? -e 0]; then
+      echo success
+      else
+      echo failure
+      fi
+}
+
+
 nodejs(){
   echo  -e "${color}Configuring nodejs repo ${nocolor}"
   curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>log_file
@@ -28,13 +77,7 @@ nodejs(){
   echo  -e "${color}Install nodejs dependencies ${nocolor}"
   npm install &>>log_file
 
-  echo  -e "${color}Copying service file ${nocolor}"
-  cp /home/centos/roboshop-shell/$component.service /etc/systemd/system/$component.service &>>log_file
-
-  echo  -e "${color}Start $conponent services ${nocolor}"
-  systemctl daemon-reload &>>log_file
-  systemctl enable $component &>>log_file
-  systemctl start $component &>>log_file
+  systemd_setup
 }
 
 mongo_scheema_setup(){
@@ -72,12 +115,7 @@ maven(){
   mvn clean package &>>log_file
   mv target/$component-1.0.jar $component.jar &>>log_file
 
-  echo -e "${color}Copying the service file${nocolor}"
-  cp $component.service /etc/systemd/system/$component.service &>>log_file
-  systemctl daemon-reload &>>log_file
-  echo -e "${color}Start shipping services ${nocolor}"
-  systemctl enable $component &>>log_file
-  systemctl start $component &>>log_file
+ systemd_setup
 
  mysql_schema_setup
 }
